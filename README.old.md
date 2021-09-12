@@ -1,1 +1,0 @@
-# react-recipe-search-buddy
