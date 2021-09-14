@@ -12,9 +12,10 @@ import {
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 
-type NavLinkProps = { text: string };
-const NavLink = ({ text }: NavLinkProps) => (
+type NavLinkProps = { text: string; routeTo: string };
+const NavLink = ({ text, routeTo }: NavLinkProps) => (
   <Link
+    as={RouteLink}
     color="white"
     px={2}
     py={1}
@@ -24,6 +25,7 @@ const NavLink = ({ text }: NavLinkProps) => (
       textDecoration: "none",
       color: "orange.300",
     }}
+    to={routeTo}
   >
     {text}
   </Link>
@@ -51,12 +53,8 @@ const Navbar: React.FC = () => {
             onClick={isOpen ? onClose : onOpen}
           />
           <HStack as={"nav"} spacing={4} display={{ base: "none", md: "flex" }}>
-            <RouteLink to="/">
-              <NavLink text="Search" />
-            </RouteLink>
-            <RouteLink to="/favorites">
-              <NavLink text="Favorites" />
-            </RouteLink>
+            <NavLink text="Search" routeTo="/" />
+            <NavLink text="Favorites" routeTo="/favorites" />
           </HStack>
         </Flex>
       </Container>
@@ -65,12 +63,8 @@ const Navbar: React.FC = () => {
         <Box pb={4} display={{ md: "none" }}>
           <Container>
             <Stack as={"nav"} spacing={4} justify={"flex-end"}>
-              <RouteLink to="/">
-                <NavLink text="Search" />
-              </RouteLink>
-              <RouteLink to="/favorites">
-                <NavLink text="Favorites" />
-              </RouteLink>
+              <NavLink text="Search" routeTo="/" />
+              <NavLink text="Favorites" routeTo="/favorites" />
             </Stack>
           </Container>
         </Box>
