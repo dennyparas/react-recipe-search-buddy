@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   Box,
   Flex,
@@ -12,14 +12,33 @@ import {
   CloseButton,
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
+import { RecipesContext } from "../context/recipeContext";
 
 const Searchbar: React.FC = () => {
+  const { searchRecipes, clearRecipeSearch, isLoading } =
+    useContext(RecipesContext);
   const [searchQuery, setSearchQuery] = useState("");
+  const [lastQuery, setLastQuery] = useState({ query: "", mealType: "" });
   const [mealType, setMealType] = useState("");
-  const handleClearSearch = () => setSearchQuery("");
+  const handleClearSearch = () => {
+    setSearchQuery("");
+    clearRecipeSearch();
+    setLastQuery({ query: "", mealType: "" });
+    setMealType("");
+  };
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (searchQuery !== lastQuery.query || mealType !== lastQuery.mealType) {
+      searchRecipes(searchQuery, mealType);
+      setLastQuery({ query: searchQuery, mealType: mealType });
+    }
+  };
+
+  const handleSearchQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    if (!value) setMealType("");
   };
   return (
     <Box
@@ -39,7 +58,7 @@ const Searchbar: React.FC = () => {
                   type="text"
                   value={searchQuery}
                   placeholder="Search Recipe"
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={handleSearchQuery}
                 />
                 <InputRightElement width="2.5rem">
                   {searchQuery && (
@@ -52,6 +71,7 @@ const Searchbar: React.FC = () => {
               <FormControl display={{ base: "none", md: "flex" }}>
                 <Select
                   bg="white"
+                  value={mealType}
                   placeholder="Meal Type (All)"
                   isDisabled={!searchQuery}
                   onChange={(e) => setMealType(e.target.value)}
@@ -66,6 +86,7 @@ const Searchbar: React.FC = () => {
             </Box>
             <Box flexBasis={"10%"} mr="2">
               <IconButton
+                isDisabled={isLoading}
                 type="submit"
                 aria-label="Search Recipe"
                 bg="red.600"

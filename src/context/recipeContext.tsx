@@ -3,8 +3,8 @@ import axios from "axios";
 
 const rootUrl = "https://api.edamam.com/api/recipes/v2";
 
-let APP_ID: String;
-let APP_KEY: String;
+let APP_ID: string;
+let APP_KEY: string;
 
 if (process.env.NODE_ENV !== "production") {
   APP_ID = process.env.REACT_APP_RECIPE_APP_ID || "";
@@ -14,21 +14,69 @@ if (process.env.NODE_ENV !== "production") {
   APP_KEY = process.env.RECIPE_APP_KEY || "";
 }
 
-const RecipesContext = createContext<any>(null);
+type Recipes = {
+  count: number;
+  hits: object[];
+  _links: any;
+};
+
+type RecipeContextState = {
+  searchRecipes: (recipe: string, mealType: string) => void;
+  clearRecipeSearch: () => void;
+  loadMore: (url: string) => void;
+  recipes: Recipes;
+  isLoading: boolean;
+  apiError: boolean;
+  recipeNotFound: boolean;
+};
+
+const RecipeContextDefaultValues: RecipeContextState = {
+  recipes: { count: 0, hits: [], _links: {} },
+  isLoading: false,
+  apiError: false,
+  recipeNotFound: false,
+  searchRecipes: () => {},
+  clearRecipeSearch: () => {},
+  loadMore: () => {},
+};
+
+const RecipesContext = createContext<RecipeContextState>(
+  RecipeContextDefaultValues
+);
 
 const RecipesProvider: React.FC = ({ children }) => {
-  const [recipes, setRecipes] = useState(null);
+  const [recipes, setRecipes] = useState<Recipes>({
+    count: 0,
+    hits: [],
+    _links: {},
+  });
   const [apiError, setApiError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [recipeNotFound, setRecipeNotFound] = useState(false);
 
+  const loadMore = async (url: string) => {
+    try {
+      setIsLoading(true);
+      const response = await axios(url);
+      setRecipes({
+        count: response.data.count,
+        hits: [...recipes.hits, ...response.data.hits],
+        _links: response.data._links,
+      });
+    } catch (error) {
+      setApiError(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const clearRecipeSearch = () => {
     setApiError(false);
-    setRecipes(null);
+    setRecipes({ count: 0, hits: [], _links: {} });
     setRecipeNotFound(false);
   };
 
-  const searchRecipes = async (recipe: String, mealType: String) => {
+  const searchRecipes = async (recipe: string, mealType: string = "") => {
     const request = !mealType
       ? `${rootUrl}?type=public&q=${recipe}&app_id=${APP_ID}&app_key=${APP_KEY}`
       : `${rootUrl}?type=public&q=${recipe}&mealType=${mealType}&app_id=${APP_ID}&app_key=${APP_KEY}`;
@@ -41,7 +89,7 @@ const RecipesProvider: React.FC = ({ children }) => {
         data: { count },
       } = response;
       if (count) {
-        setRecipes(response.data.hits);
+        setRecipes(response.data);
       } else {
         setRecipeNotFound(true);
       }
@@ -57,6 +105,7 @@ const RecipesProvider: React.FC = ({ children }) => {
       value={{
         clearRecipeSearch,
         searchRecipes,
+        loadMore,
         recipes,
         isLoading,
         apiError,
