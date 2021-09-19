@@ -37,6 +37,7 @@ const Searchbar: React.FC = () => {
 
   const handleSearchQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
+
     setSearchQuery(value);
     if (!value) setMealType("");
   };

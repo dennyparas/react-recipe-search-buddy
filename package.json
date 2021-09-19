@@ -17,7 +17,6 @@
     "@types/node": "^12.20.24",
     "@types/react": "^17.0.20",
     "@types/react-dom": "^17.0.9",
-    "@types/react-router-dom": "^5.1.8",
     "axios": "^0.21.4",
     "focus-visible": "^5.2.0",
     "framer-motion": "^4.1.17",
@@ -51,5 +50,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/react-router-dom": "^5.1.9"
   }
 }

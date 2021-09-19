@@ -31,7 +31,7 @@ const RedirectAlert: React.FC<Props> = ({ open, sourceUrl, toggle }) => {
       isOpen={isOpen}
       leastDestructiveRef={cancelRef}
       onClose={onCancel}
-      size="sm"
+      size="xs"
       isCentered={true}
       motionPreset="scale"
     >
@@ -42,7 +42,7 @@ const RedirectAlert: React.FC<Props> = ({ open, sourceUrl, toggle }) => {
           </AlertDialogHeader>
 
           <AlertDialogBody>
-            Are you sure you want to redirect to the recipe source?
+            Are you sure you want to redirect to the recipe source website?
           </AlertDialogBody>
 
           <AlertDialogFooter>

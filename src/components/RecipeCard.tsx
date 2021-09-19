@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import {
   Box,
@@ -11,25 +11,15 @@ import {
 } from "@chakra-ui/react";
 import fallbackImg from "./../assets/300x300-default.png";
 import RedirectAlert from "./RedirectAlert";
+import { RecipesContext } from "../context/recipeContext";
+import { Recipe } from "./../types/Recipe";
+import FavoriteButton from "./FavoriteButton";
+import { useNavigate } from "react-router-dom";
 
-type Props = {
-  hit: {
-    recipe: {
-      uri: string;
-      image: string;
-      source: string;
-      label: string;
-      url: string;
-      calories: number;
-      yield: number;
-      ingredients: object[];
-    };
-  };
-};
-
-const RecipeCard: React.FC<Props> = ({ hit }) => {
+const RecipeCard: React.FC<Recipe> = ({ recipe }) => {
+  const navigate = useNavigate();
+  const { saveViewedRecipes } = useContext(RecipesContext);
   const [isRedirectAlert, setIsRedirectAlert] = useState(false);
-  const { recipe } = hit;
   const {
     uri,
     image,
@@ -41,10 +31,13 @@ const RecipeCard: React.FC<Props> = ({ hit }) => {
     ingredients,
   } = recipe;
 
-  const totalCal = calories / servings;
-
   const getRecipeId = () => {
     return uri.split("#")[1];
+  };
+
+  const goToPage = (page: string) => {
+    saveViewedRecipes({ recipe });
+    navigate(page);
   };
 
   const showRedirectAlert = () => {
@@ -53,7 +46,7 @@ const RecipeCard: React.FC<Props> = ({ hit }) => {
 
   return (
     <Box
-      maxW="sm"
+      maxW={{ base: "100%", sm: "sm" }}
       borderWidth="1px"
       borderRadius="lg"
       overflow="hidden"
@@ -61,15 +54,26 @@ const RecipeCard: React.FC<Props> = ({ hit }) => {
         boxShadow: "2xl",
       }}
     >
-      <Box h={"300px"} bg={"gray.100"} mt={-6} mx={-6} mb={6} pos={"relative"}>
+      <Box
+        h={{ base: "150px", sm: "300px" }}
+        bg={"gray.100"}
+        mt={-6}
+        mx={-6}
+        mb={{ base: "2", sm: "6" }}
+        pos={"relative"}
+      >
+        <Box position="absolute" top="10" right="10">
+          <FavoriteButton recipe={recipe} />
+        </Box>
         <Image
-          height="300px"
+          height={{ base: "150px", sm: "300px" }}
           loading="eager"
           w={"full"}
           src={image}
           objectFit={"cover"}
-          alt={label}
           fallbackSrc={fallbackImg}
+          onClick={() => goToPage(`/recipe/${getRecipeId()}`)}
+          cursor="pointer"
         />
       </Box>
       <Box px="4">
@@ -77,44 +81,42 @@ const RecipeCard: React.FC<Props> = ({ hit }) => {
           onClick={() => showRedirectAlert()}
           color={"red.400"}
           textTransform={"uppercase"}
-          fontWeight={800}
-          fontSize={"sm"}
-          letterSpacing={1.1}
-          mb="1.5"
+          fontWeight={{ base: 600, sm: 800 }}
+          fontSize={{ base: "xs", sm: "sm" }}
+          letterSpacing={1}
+          mb={{ base: "xs", sm: "1.5" }}
           cursor="pointer"
         >
           {source}
         </Text>
-        <Box height="56px">
+        <Box minheight="56px">
           <Heading
             display="block"
             as={Link}
             to={`/recipe/${getRecipeId()}`}
             color={useColorModeValue("gray.700", "white")}
-            fontSize={"1xl"}
+            fontSize={{ base: "xs", sm: "md", md: "md" }}
             fontFamily={"body"}
+            onClick={() => saveViewedRecipes({ recipe })}
           >
             {label}
           </Heading>
         </Box>
         <Divider orientation="horizontal" mt="2" mb="3" />
-        <Stack
-          alignSelf="flex-end"
-          direction={"row"}
-          justify={"center"}
-          spacing={12}
-          mt="2"
-          mb="3"
-        >
-          <Stack spacing={0} align={"center"}>
-            <Text fontWeight={600}>{totalCal.toFixed()}</Text>
-            <Text fontSize={"sm"} color={"red.300"}>
+        <Stack direction={"row"} justify={"center"} mb="2">
+          <Stack flex={1} spacing={1} align={"center"}>
+            <Text fontSize={{ base: "xs", sm: "sm" }} fontWeight={600}>
+              {(calories / servings).toFixed()}
+            </Text>
+            <Text fontSize={{ base: "xs", sm: "sm" }} color={"red.300"}>
               Calories
             </Text>
           </Stack>
-          <Stack spacing={0} align={"center"}>
-            <Text fontWeight={600}>{ingredients.length}</Text>
-            <Text fontSize={"sm"} color={"red.300"}>
+          <Stack flex={1} spacing={1} align={"center"}>
+            <Text fontSize={{ base: "xs", sm: "sm" }} fontWeight={600}>
+              {ingredients.length}
+            </Text>
+            <Text fontSize={{ base: "xs", sm: "sm" }} color={"red.300"}>
               Ingredients
             </Text>
           </Stack>
