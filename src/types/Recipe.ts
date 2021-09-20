@@ -55,6 +55,7 @@ export type RecipeContextState = {
     compareItem: (recipeItem: object) => void;
     unCompareItem: (recipeItem: string) => void;
     saveViewedRecipes: (recipe: Recipe) => void;
+    removeSearchItem: (query: string) => void;
     recipes: Recipes;
     isLoading: boolean;
     apiError: boolean;

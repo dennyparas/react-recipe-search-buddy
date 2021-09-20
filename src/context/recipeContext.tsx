@@ -30,6 +30,7 @@ const RecipeContextDefaultValues: RecipeContextState = {
   compareItem: () => {},
   unCompareItem: () => {},
   saveViewedRecipes: () => {},
+  removeSearchItem: () => {},
   recipes: { count: 0, hits: [], _links: {} },
   isLoading: false,
   apiError: false,
@@ -143,7 +144,7 @@ const RecipesProvider: React.FC = ({ children }) => {
       if (removeIndex !== -1) currentQueryList.splice(removeIndex, 1);
 
       newQueryList = [queryItem, ...currentQueryList];
-      if (newQueryList.length >= 11) {
+      if (newQueryList.length >= 20) {
         newQueryList.pop();
       }
       setQueryList(newQueryList);
@@ -151,6 +152,15 @@ const RecipesProvider: React.FC = ({ children }) => {
       newQueryList = [queryItem, ...currentQueryList];
       setQueryList(newQueryList);
     }
+    localStorage.setItem("queryList", JSON.stringify(newQueryList));
+  };
+
+  const removeSearchItem = (item: string) => {
+    const newQueryList = queryList.filter(
+      (oldSearchItem: any) => oldSearchItem.query !== item
+    );
+
+    setQueryList(newQueryList);
     localStorage.setItem("queryList", JSON.stringify(newQueryList));
   };
 
@@ -199,10 +209,10 @@ const RecipesProvider: React.FC = ({ children }) => {
   const favoriteItem = (recipeItem: object) => {
     localStorage.setItem(
       "favorites",
-      JSON.stringify([...favorites, recipeItem])
+      JSON.stringify([recipeItem, ...favorites])
     );
 
-    setFavorites([...favorites, recipeItem]);
+    setFavorites([recipeItem, ...favorites]);
   };
 
   const unFavoriteItem = (item: string) => {
@@ -298,6 +308,7 @@ const RecipesProvider: React.FC = ({ children }) => {
         compareItem,
         unCompareItem,
         saveViewedRecipes,
+        removeSearchItem,
         recipes,
         isLoading,
         apiError,
