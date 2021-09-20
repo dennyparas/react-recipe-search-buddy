@@ -67,7 +67,7 @@ const RecentlyContainer: React.FC = () => {
           <RecipeList recipes={viewedRecipeList} />
         </Container>
       )}
-      {viewedRecipeList.length > 0 && (
+      {favorites.length > 0 && (
         <Container maxW="container.xl">
           <Box mt="4">
             <Text
