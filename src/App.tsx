@@ -2,22 +2,31 @@ import React from "react";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Recipe from "./pages/Recipe";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { RecipesProvider } from "./context/recipeContext";
 import Favorites from "./pages/Favorites";
 import Compare from "./pages/Compare";
+import {} from "react-router-dom";
 
-const App: React.FC = () => {
+const App: React.FC<{}> = () => {
   return (
     <RecipesProvider>
       <Router>
         <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/recipe/:recipe_id" element={<Recipe />} />
-          <Route path="/favorites" element={<Favorites />} />
-          <Route path="/compare" element={<Compare />} />
-        </Routes>
+        <Switch>
+          <Route exact path="/">
+            <Home />
+          </Route>
+          <Route path="/recipe/:recipe_id">
+            <Recipe />
+          </Route>
+          <Route exact path="/favorites">
+            <Favorites />
+          </Route>
+          <Route exact path="/compare">
+            <Compare />
+          </Route>
+        </Switch>
       </Router>
     </RecipesProvider>
   );

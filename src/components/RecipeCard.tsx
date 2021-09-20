@@ -14,10 +14,10 @@ import RedirectAlert from "./RedirectAlert";
 import { RecipesContext } from "../context/recipeContext";
 import { Recipe } from "./../types/Recipe";
 import FavoriteButton from "./FavoriteButton";
-import { useNavigate } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const RecipeCard: React.FC<Recipe> = ({ recipe }) => {
-  const navigate = useNavigate();
+  const history = useHistory();
   const { saveViewedRecipes } = useContext(RecipesContext);
   const [isRedirectAlert, setIsRedirectAlert] = useState(false);
   const {
@@ -37,7 +37,7 @@ const RecipeCard: React.FC<Recipe> = ({ recipe }) => {
 
   const goToPage = (page: string) => {
     saveViewedRecipes({ recipe });
-    navigate(page);
+    history.push(page);
   };
 
   const showRedirectAlert = () => {

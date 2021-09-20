@@ -1,4 +1,4 @@
-import { Link as RouteLink } from "react-router-dom";
+import { NavLink as RouteLink } from "react-router-dom";
 import {
   Box,
   Flex,
@@ -20,6 +20,11 @@ const NavLink = ({ text, routeTo, count }: NavLinkProps) => {
   const stringCount = "" + count;
   return (
     <Link
+      exact
+      activeStyle={{
+        fontWeight: "bold",
+        color: "yellow",
+      }}
       as={RouteLink}
       color="white"
       px={2}
@@ -28,7 +33,7 @@ const NavLink = ({ text, routeTo, count }: NavLinkProps) => {
       rounded={"md"}
       _hover={{
         textDecoration: "none",
-        color: "orange.300",
+        color: "yellow",
       }}
       to={routeTo}
       pos={"relative"}

@@ -28,7 +28,7 @@ import FavoriteButton from "./FavoriteButton";
 import CompareButton from "./CompareButton";
 
 const RecipeInfo: React.FC = () => {
-  const { recipe_id } = useParams();
+  const { recipe_id } = useParams<{ recipe_id?: string }>();
   const [isRedirectAlert, setIsRedirectAlert] = useState(false);
   const { getRecipeInfo, recipeInfo, isLoading, recipeNotFound, apiError } =
     useContext(RecipesContext);
