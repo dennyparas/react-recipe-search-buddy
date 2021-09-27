@@ -15,6 +15,7 @@ const RecipeSearchResults: React.FC = () => {
     isLoading,
     loadMore,
   } = useContext(RecipesContext);
+
   useEffect(() => {
     if (recipeNotFound || apiError) {
       clearRecipeSearch();
@@ -38,9 +39,10 @@ const RecipeSearchResults: React.FC = () => {
               {recipes.count} Recipes found
             </Text>
           </Box>
-          <RecipeList recipes={recipes.hits} />
         </>
       )}
+
+      <RecipeList recipes={recipes.hits} />
 
       {isLoading && <RecipeCardSkeleton length={8} />}
 
