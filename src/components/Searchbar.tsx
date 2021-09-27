@@ -15,11 +15,16 @@ import { SearchIcon } from "@chakra-ui/icons";
 import { RecipesContext } from "../context/recipeContext";
 
 const Searchbar: React.FC = () => {
-  const { searchRecipes, clearRecipeSearch, isLoading } =
-    useContext(RecipesContext);
-  const [searchQuery, setSearchQuery] = useState("");
+  const {
+    searchQuery,
+    mealType,
+    setSearchQuery,
+    setMealType,
+    searchRecipes,
+    clearRecipeSearch,
+    isLoading,
+  } = useContext(RecipesContext);
   const [lastQuery, setLastQuery] = useState({ query: "", mealType: "" });
-  const [mealType, setMealType] = useState("");
   const handleClearSearch = () => {
     setSearchQuery("");
     clearRecipeSearch();
