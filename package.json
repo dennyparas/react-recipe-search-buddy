@@ -1,6 +1,6 @@
 {
   "name": "react-recipe-search-buddy",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "dependencies": {
     "@chakra-ui/css-reset": "^1.0.0",

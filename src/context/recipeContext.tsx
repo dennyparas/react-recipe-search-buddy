@@ -13,6 +13,8 @@ let APP_ID = process.env.REACT_APP_RECIPE_APP_ID;
 let APP_KEY = process.env.REACT_APP_RECIPE_APP_KEY;
 
 const RecipeContextDefaultValues: RecipeContextState = {
+  setSearchQuery: () => {},
+  setMealType: () => {},
   searchRecipes: () => {},
   clearRecipeSearch: () => {},
   loadMore: () => {},
@@ -23,6 +25,8 @@ const RecipeContextDefaultValues: RecipeContextState = {
   unCompareItem: () => {},
   saveViewedRecipes: () => {},
   removeSearchItem: () => {},
+  searchQuery: "",
+  mealType: "",
   recipes: { count: 0, hits: [], _links: {} },
   isLoading: false,
   apiError: false,
@@ -65,6 +69,8 @@ const RecipesContext = createContext<RecipeContextState>(
 );
 
 const RecipesProvider: React.FC = ({ children }) => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [mealType, setMealType] = useState("");
   const [compareList, setCompareList] = useState<object[]>([]);
   const [favorites, setFavorites] = useState<object[]>([]);
   const [recipes, setRecipes] = useState<Recipes>(
@@ -271,6 +277,8 @@ const RecipesProvider: React.FC = ({ children }) => {
       if (count) {
         setRecipes(response.data);
         saveSearchQuery(recipe, mealType);
+        setSearchQuery(recipe);
+        setMealType(mealType);
       } else {
         setRecipeNotFound(true);
       }
@@ -291,6 +299,8 @@ const RecipesProvider: React.FC = ({ children }) => {
   return (
     <RecipesContext.Provider
       value={{
+        setSearchQuery,
+        setMealType,
         clearRecipeSearch,
         searchRecipes,
         loadMore,
@@ -301,6 +311,8 @@ const RecipesProvider: React.FC = ({ children }) => {
         unCompareItem,
         saveViewedRecipes,
         removeSearchItem,
+        searchQuery,
+        mealType,
         recipes,
         isLoading,
         apiError,

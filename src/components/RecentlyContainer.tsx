@@ -31,12 +31,12 @@ const RecentlyContainer: React.FC = () => {
               Recently Search
             </Text>
           </Box>
-          {queryList.map((query: any) => (
+          {queryList.map((query: any, index: number) => (
             <Tag
               size="md"
               mr="3"
               mb="2"
-              key={query.query}
+              key={index}
               borderRadius="full"
               variant="outline"
               colorScheme="red"
