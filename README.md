@@ -1,6 +1,6 @@
 ## react-recipe-search-buddy
 
-A web app (single page application) created with react.js free edamam api.
+A web app (single page application) created with react.js, chakra-ui and free edamam api.
 
 ### Features
 
@@ -27,8 +27,8 @@ REACT_APP_RECIPE_APP_KEY = 'add your edamam app key here'
 
 for production create an .env file outside the src folder and copy the key below:
 
-RECIPE_APP_ID = 'add your edamam app id here'
-RECIPE_APP_KEY = 'add your edamam app key here'
+REACT_APP_RECIPE_APP_ID = 'add your edamam app id here'
+REACT_APP_RECIPE_APP_KEY = 'add your edamam app key here'
 
 ---
 
